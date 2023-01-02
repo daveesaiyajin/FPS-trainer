@@ -4,8 +4,6 @@
  */
 package jpwp;
 
-import java.awt.Toolkit;
-
 public class FPS_Game {
 
     public static void main(String[] args) {
