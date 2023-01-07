@@ -6,13 +6,31 @@ package jpwp;
 
 public class FPS_Status {
 
-    public int level;
-    public double time;
+    public int ObjectsCounter; // define number of objects that was hit
+    public int level; // define current level of the game
+    public double time; // define time of current level
+
+    /*
+     * Reset status of the game to the beginning
+     */
 
     public void reset() {
-        level = 0;
+        ObjectsCounter = 0;
+        level = 1;
         time = 0.0;
     }
+
+    /*
+     * Reset counter of hitted objects on particular level
+     */
+
+    public void ResetObjectsCounter() {
+        ObjectsCounter = 0;
+    }
+
+    /*
+     * Increment the level counter
+     */
 
     public void nextLevel() {
         level++;

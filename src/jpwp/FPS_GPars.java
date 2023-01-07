@@ -16,9 +16,9 @@ public class FPS_GPars {
     public static Image logoImage;
     public static Image cursorImage;
     public static Image[] balloons;
-    public static boolean pause = false;
+    public static boolean pause = false; // variable that set the current status of the game
     public static boolean levelPause = false;
-    public static long startTime;
+    public static long startTime; // variable that define the starting time of the game
     public static double levelTime;
     public static int MoveMODE = 1;
     public static boolean end = false;
