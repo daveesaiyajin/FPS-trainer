@@ -5,9 +5,7 @@
 package jpwp;
 
 import javax.swing.JPanel;
-import javax.swing.event.MouseInputAdapter;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -16,8 +14,6 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
-import javax.swing.JOptionPane;
-import java.awt.*;
 
 public class FPS_Panel extends JPanel {
 
@@ -30,28 +26,38 @@ public class FPS_Panel extends JPanel {
 
     /* Number of objects on the screen */
     public int objectsOnTheScreen;
-    /** Przesunięcie pomiędzy liniami z obiektami/bsalonami */
-    public int shiftBL;
+    /* Shift between the objects on the screen */
+    public int objectsShift;
 
+    /* Definition of fpsStatus object */
     public FPS_Status fpsStatus;
+    /* Definition of menu font */
     public Font menuFont;
+    /* Definition of alert font */
     public Font alertFont;
 
     /** Table of objects */
     private FPS_GameObjects[] gameObjects;
 
     public FPS_Panel(int width, int height) {
+        /* Create the object */
         fpsStatus = new FPS_Status();
+        /* Reset all the game parameters */
         fpsStatus.reset();
+        /* Create menu font */
         menuFont = new Font("Dialog", Font.BOLD, 36);
+        /* Create alert font */
         alertFont = new Font("Dialog", Font.BOLD, 92);
 
+        /* Assign the value width to global parameter */
         this.panelWidth = width;
+        /* Assign the value height to global parameter */
         this.panelHeight = height;
-        barHeight = 50;
+        /* Set the bar height - given in pixels */
+        barHeight = 200;
 
-        objectsOnTheScreen = 1;
-        shiftBL = panelWidth / (FPS_GPars.noOfObjects / objectsOnTheScreen);
+        objectsOnTheScreen = 4;
+        objectsShift = panelWidth / (FPS_GPars.noOfObjects / objectsOnTheScreen);
         gameObjects = new FPS_GameObjects[FPS_GPars.noOfObjects];
 
         restartFPSGame();
@@ -183,7 +189,7 @@ public class FPS_Panel extends JPanel {
                 inLine %= objectsOnTheScreen;
             }
             inLine++;
-            gameObjects[i].setYPos(yLine * shiftBL * -1);
+            gameObjects[i].setYPos(yLine * objectsShift * -1);
         } // koniec for i
     }
 }

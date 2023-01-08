@@ -23,12 +23,12 @@ public class FPS_GPars {
     public static int MoveMODE = 1;
     public static boolean end = false;
     public static int noOfObjects = 12;
-    public static int gWidth = 1024;
-    public static int gHeight = 768;
+    public static int gWidth = 1920;
+    public static int gHeight = 1080;
 
     public static void loadInitialImages() {
 
-        bgImage = loadImage("images/grass_sky_1024.jpg");
+        bgImage = loadImage("images/water_1920_1080.jpg");
         menuImage = loadImage("images/menu_1024.png");
         menuGameImage = loadImage("images/gra_1024.png");
         logoImage = loadImage("images/domestic_logo_url.png");

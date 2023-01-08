@@ -29,15 +29,16 @@ public class FPS_Window extends JFrame {
     public FPS_Window(int width, int height) {
         super();
         fpsMenuBar = new FPS_MenuBar();
+        setJMenuBar(fpsMenuBar);
         setTitle("FPS Trainer game"); // set the title of the game
         setSize(width, height); // set the size of the window
         setResizable(false); // set parameter that allows to change the size of the window
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // set the default window operations
         // setUndecorated(true); - parametr ukrywający ramkę okna
         setLocationRelativeTo(rootPane); // set the location of the window in the center
-        setVisible(true); // set the visibility of the window
-        setJMenuBar(fpsMenuBar);
         initGUI(width, height); // this is a method that initialize the interface
+        setVisible(true); // set the visibility of the window
+        animationLoop(); // start the game loop
     }
 
     /*
@@ -57,6 +58,7 @@ public class FPS_Window extends JFrame {
         int CursorWidth = FPS_GPars.cursorImage.getWidth(null);
         int CursorHeight = FPS_GPars.cursorImage.getHeight(null);
 
+        /* Set the cursor middle point */
         Point cursorPoint = new Point(CursorWidth / 2, CursorHeight / 2);
 
         // Set the courses shape
@@ -65,5 +67,32 @@ public class FPS_Window extends JFrame {
         // set the game panel
         add(new FPS_Panel(width, height));
     }
+
+    /**
+     * Główna pętla gry - takt animacji (w procesie dalszej edukacji
+     * można używać wątków czy klasy Timer)
+     */
+    private void animationLoop() {
+        // Set the starting time of the game by getting the current system timestamp
+        FPS_GPars.startTime = System.currentTimeMillis();
+        long currTime = FPS_GPars.startTime;
+
+        while (currTime - FPS_GPars.startTime < FPS_GPars.GAME_TIME) {
+            long elapsedTime = System.currentTimeMillis() - currTime;
+            // licz czas gry - może się przydać w ograniczeniach czasowych
+            // w tej demonstracji nie wykorzystane
+            currTime += elapsedTime;
+
+            // odrysuj kolejny ekran gry (nowe pozycje obiektów - symulacja ruchu)
+            repaint();
+
+            // przerwa w czasie
+            try {
+                Thread.sleep(80);
+            } catch (InterruptedException ex) {
+                System.out.println("Wyjątek: " + ex);
+            }
+        } // koniec while
+    }// koniec animationLoop()
 
 }
