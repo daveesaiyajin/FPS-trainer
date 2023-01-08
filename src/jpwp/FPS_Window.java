@@ -69,8 +69,7 @@ public class FPS_Window extends JFrame {
     }
 
     /**
-     * Główna pętla gry - takt animacji (w procesie dalszej edukacji
-     * można używać wątków czy klasy Timer)
+     * Main loop of the game
      */
     private void animationLoop() {
         // Set the starting time of the game by getting the current system timestamp
@@ -79,20 +78,26 @@ public class FPS_Window extends JFrame {
 
         while (currTime - FPS_GPars.startTime < FPS_GPars.GAME_TIME) {
             long elapsedTime = System.currentTimeMillis() - currTime;
-            // licz czas gry - może się przydać w ograniczeniach czasowych
-            // w tej demonstracji nie wykorzystane
+            // check current time - will be used to check if the level time was exceeded
             currTime += elapsedTime;
 
-            // odrysuj kolejny ekran gry (nowe pozycje obiektów - symulacja ruchu)
+            long levelTime = System.currentTimeMillis() - FPS_GPars.startTime;
+
+            System.out.println("Aktualny czas gry: " + levelTime);
+
+            if (currTime - System.currentTimeMillis() >= FPS_GPars.LEVEL_TIME) {
+                System.out.println("Time's up! " + levelTime);
+            }
+            // draw position of next objects
             repaint();
 
-            // przerwa w czasie
+            // sleep time
             try {
-                Thread.sleep(80);
+                Thread.sleep(100);
             } catch (InterruptedException ex) {
                 System.out.println("Wyjątek: " + ex);
             }
-        } // koniec while
-    }// koniec animationLoop()
+        } // end of while condition
+    }// end of animationLoop() method
 
 }

@@ -4,6 +4,7 @@
  */
 package jpwp;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import java.awt.Color;
@@ -54,7 +55,7 @@ public class FPS_Panel extends JPanel {
         /* Assign the value height to global parameter */
         this.panelHeight = height;
         /* Set the bar height - given in pixels */
-        barHeight = 200;
+        barHeight = 130;
 
         objectsOnTheScreen = 4;
         objectsShift = panelWidth / (FPS_GPars.noOfObjects / objectsOnTheScreen);
@@ -67,28 +68,71 @@ public class FPS_Panel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent mEvent) {
 
-                int mouseX = mEvent.getX(); // position X of the coursor
-                int mouseY = mEvent.getY(); // position Y of the coursor
+                int mouseX = mEvent.getX();
+                int mouseY = mEvent.getY();
 
-                /* Check if the menu bar was choosen */
-                if (mouseX > (width - 150) && mouseY > (height - barHeight)) {
+                /* Choose menu bar */
+                if (mouseX > (width - 400) && mouseY > (height - barHeight)) {
                     FPS_GPars.pause = !FPS_GPars.pause;
                     return;
                 }
 
-                /* Check if user choose Exit button */
-                if (mouseX < 300 && mouseY > (height - barHeight)) {
+                /* Check if user choose end game button */
+                if (mouseX < ((panelWidth / 8) + 30) && mouseY > (height - barHeight)) {
                     if (FPS_GPars.pause) {
                         System.exit(1);
                     }
                 }
+                // czy wybrano rozpoczęcie nowego poziomu lub nowej gry
+                if (mouseX > ((panelWidth / 8) + 30) && mouseX < 800
+                        && mouseY > (panelHeight - barHeight)) {
+                    // Nowa gra
+                    if (FPS_GPars.pause) {
+                        FPS_GPars.MoveMODE = 1;
+                        FPS_GPars.end = false;
+                        fpsStatus.reset();
+                        FPS_GPars.levelPause = false;
+                        FPS_GPars.bgImage = FPS_GPars.loadImage("images/water_1920_1080.jpg");
+                        restartFPSGame();
+                        repaint();
+                    } else {
+                        // Nowy poziom
+                        if (FPS_GPars.levelPause) {
+                            // Czy dostępny jest kolejny poziom
+                            if (FPS_GPars.MoveMODE < FPS_GPars.NO_LEVELS) {
+                                FPS_GPars.MoveMODE++;
+                                fpsStatus.time += FPS_GPars.levelTime;
+                                FPS_GPars.levelPause = false;
+                                FPS_GPars.bgImage = FPS_GPars.loadImage("images/water_1920_1080.jpg");
+                                fpsStatus.nextLevel();
+                                restartFPSGame();
+                            } else {
+                                // koniec poziomów = koniec gry
+                                FPS_GPars.end = true;
+                                fpsStatus.time += FPS_GPars.levelTime;
+                                FPS_GPars.pause = true;
+                            }
+                            repaint();
+                        }
+                    }
+                }
+                // inaczej sprawdź czy trafiono obiekt (balon)
+                for (int i = 0; i < gameObjects.length; i++) {
+                    if (mouseY < (panelHeight - barHeight)) {
+                        if (gameObjects[i].containsPoint(mouseX, mouseY)) {
+                            if (!gameObjects[i].hit) {
+                                gameObjects[i].setHit();
+                                fpsStatus.ObjectsCounter++;
+                            }
+                        }
+                    }
+                } // koniec for i
             }
         }); // end of MouseListener method
     }
 
     /**
-     * Nadpisz metodę odpowiedzialną za odrysowanie panelu - własne wypełnienie
-     * pola graficznego gry, zgodnie z wybraną treścią.
+     * Overwrite the method that is responsible of painting the panel
      * 
      * @param gs
      */
@@ -113,37 +157,34 @@ public class FPS_Panel extends JPanel {
         }
 
         // Ustaw kolor dolnego paska Menu i narysuj pasek
-        g.setColor(new Color(50, 30, 0));
+        g.setColor(new Color(70, 40, 20));
         g.fillRect(0, panelHeight - barHeight, panelWidth, barHeight);
-        // Ustaw kolor domyślny
-        g.setColor(Color.white);
         // Ustaw czcionki do wypełnienia paska Menu
         g.setFont(menuFont);
 
-        // Jeśli już wybrano Menu (czyli pausa) narysuj stosowną wersję paska Menu
+        // Draw the menu once the pause is set to true
         if (FPS_GPars.pause) {
-            g.drawImage(FPS_GPars.menuGameImage, panelWidth - 150, panelHeight - barHeight - 30, null);
-            g.setColor(Color.red);
-            g.drawString("KONIEC GRY!", 10, panelHeight - 10);
-            g.setColor(Color.white);
-            g.drawString("O GRZE...", 300, panelHeight - 10);
-            g.drawString("NOWA GRA!", 550, panelHeight - 10);
+            g.setColor(Color.RED);
+            g.drawImage(FPS_GPars.menuGameImage, panelWidth / 2, panelHeight - 200, null);
+            g.drawString("END GAME", (panelWidth / 8), panelHeight - 80);
+            g.setColor(Color.WHITE);
+            g.drawString("ABOUT GAME", 3 * (panelWidth / 8), panelHeight - 80);
+            g.drawString("CHANGE SETTINGS", 5 * (panelWidth / 8), panelHeight - 80);
+            g.drawString("NEW GAME", 7 * (panelWidth / 8), panelHeight - 80);
             if (FPS_GPars.end) { // Czy wszystkie poziomy skończone - koniec gry
                 g.setColor(Color.RED);
-                // g.drawString("KONIEC?",500, panelHeight-10);
                 g.setFont(alertFont);
                 DecimalFormat df = new DecimalFormat("#.##");
-                g.drawString("KONIEC GRY! ", 170, panelHeight / 2);
-                g.drawString("CZAS RAZEM=" + df.format(fpsStatus.time) + "s", 10, panelHeight / 2 + 100);
+                g.drawString("GAME IS FINISHED! ", panelWidth / 2, panelHeight / 2);
                 g.setColor(Color.white);
+                g.drawString("TOTAL TIME=" + df.format(fpsStatus.time) + "s", panelWidth / 2, panelHeight / 2 - 200);
                 g.setFont(menuFont);
             }
             // Nie wybranu nic z menu - pokaż poziom i stan punktów w trakcie gry
         } else {
-            g.drawString("POZIOM:", 10, panelHeight - 10);
-
-            g.drawString("" + fpsStatus.level, 200, panelHeight - 10);
-            g.drawString("PUNKTY:", 300, panelHeight - 10);
+            g.setColor(Color.WHITE);
+            g.drawString("LEVEL:" + fpsStatus.level, 50, panelHeight - 75);
+            g.drawString("Object counter:" + fpsStatus.ObjectsCounter, 300, panelHeight - 75);
             // Czy ukończono poziom - wskazano wszystkie obiekty pozciomu
             if (fpsStatus.ObjectsCounter == FPS_GPars.noOfObjects) {
                 if (!FPS_GPars.levelPause) {
@@ -152,20 +193,20 @@ public class FPS_Panel extends JPanel {
                     FPS_GPars.levelPause = true;
                 }
                 g.setColor(Color.RED);
-                g.drawString("GRASZ DALEJ?", 500, panelHeight - 10);
+                g.drawString("GRASZ DALEJ?", panelWidth / 2, panelHeight - 300);
                 g.setFont(alertFont);
                 DecimalFormat df = new DecimalFormat("#.##");
-                g.drawString("WYGRANA:" + df.format(FPS_GPars.levelTime) + "s", 150, panelHeight / 2);
                 g.setColor(Color.white);
+                g.drawString("WYGRANA:" + df.format(FPS_GPars.levelTime) + "s", panelWidth / 2, panelHeight / 2);
                 g.setFont(menuFont);
                 // Jak nie zmień punkty jeśli stosowne
             } else
                 g.drawString("" + fpsStatus.ObjectsCounter, 500, panelHeight - 10);
             // narysuj ikonę z napisem Menu
-            g.drawImage(FPS_GPars.menuImage, panelWidth - 150, panelHeight - barHeight - 30, null);
+            g.drawImage(FPS_GPars.menuImage, panelWidth - 400, panelHeight - barHeight, null);
         }
-        // narysuj ikonę z logo
-        g.drawImage(FPS_GPars.logoImage, panelWidth - 180, panelHeight - barHeight + 15, null);
+        // Draw the icon
+        g.drawImage(FPS_GPars.logoImage, panelWidth / 2, panelHeight - barHeight + 20, null);
 
     }
 

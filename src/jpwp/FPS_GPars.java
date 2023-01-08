@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 
 public class FPS_GPars {
     public static long GAME_TIME = Long.MAX_VALUE;
+    public static long LEVEL_TIME = 60000; // level time set to 10 minutes
     public final static long NO_LEVELS = 2;
     public static Image bgImage;
     public static Image menuImage;
@@ -17,10 +18,11 @@ public class FPS_GPars {
     public static Image cursorImage;
     public static Image[] balloons;
     public static boolean pause = false; // variable that set the current status of the game
-    public static boolean levelPause = false;
+    public static boolean levelPause = false; // variable that pause the level
     public static long startTime; // variable that define the starting time of the game
     public static double levelTime;
     public static int MoveMODE = 1;
+    public static boolean changeSettings = false; // check if the change setting button was hit
     public static boolean end = false;
     public static int noOfObjects = 12;
     public static int gWidth = 1920;
