@@ -18,9 +18,9 @@ public class FPS_Game {
         System.out.println("Test czy działa wszystko ");
 
         /* Definition of the game window width */
-        int gameWidth = 1600;
+        int gameWidth = 1920;
         /* Definition of the game window height */
-        int gameHeight = 1024;
+        int gameHeight = 1080;
 
         /*
          * This create FPS_Window object which contain definition of GUI and all the

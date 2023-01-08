@@ -50,34 +50,35 @@ public class FPS_GameObjects {
 
     /**
      * Konstruktor - ustawienie parametrów obiektu, wylosowanie koloru balonu
-     * @param x początkowa współrzędna x
-     * @param y początkowa współrzędna y
-     * @param ampl amplituda sinus (ruch balonu)
-     * @param freq częstotliwość w funkcji sinus
+     * 
+     * @param x      początkowa współrzędna x
+     * @param y      początkowa współrzędna y
+     * @param ampl   amplituda sinus (ruch balonu)
+     * @param freq   częstotliwość w funkcji sinus
      * @param images tablica ikon z balonami
      */
-    public FlyingBalloon(int x, int y, int ampl, double freq, Image[] images){
-        this.startPosX=x;
-        this.startPosY=y;
-        currX=x;
-        currY=y;
-        this.dy=10;
-        sWidth=1600;
-        sHeight=1024;
-        hit=false;
-        
-        this.ampl=ampl;
-        this.freq=freq;
-        //losujemy kolor balonu
-        color=(int)(0.4+Math.random()*images.length);
-        if(color>=images.length) color=images.length-1;
-        icon=images[color];
-        objectWidth=icon.getWidth(null);
-        objectHeight=icon.getHeight(null);
-        //ustawiamy pulsację w funkcji sinus 2 Pi f
+    public FPS_GameObjects(int x, int y, int ampl, double freq, Image[] images) {
+        this.startPosX = x;
+        this.startPosY = y;
+        currX = x;
+        currY = y;
+        this.dy = 10;
+        sWidth = 1920;
+        sHeight = 1080;
+        hit = false;
+
+        this.ampl = ampl;
+        this.freq = freq;
+        // losujemy kolor balonu
+        color = (int) (0.4 + Math.random() * images.length);
+        if (color >= images.length)
+            color = images.length - 1;
+        icon = images[color];
+        objectWidth = icon.getWidth(null);
+        objectHeight = icon.getHeight(null);
+        // ustawiamy pulsację w funkcji sinus 2 Pi f
         setOmega(this.freq);
 
-        
     }
 
     /**
@@ -154,7 +155,7 @@ public class FPS_GameObjects {
                     currY = 0;
                 }
                 tmpX = 0;
-                currX = x + tmpX;
+                currX = startPosX + tmpX;
                 break;
             case 2:// sinus
                 currY = currY + dy;
@@ -162,7 +163,7 @@ public class FPS_GameObjects {
                     currY = 0;
                 }
                 tmpX = (int) (ampl * Math.sin(angle * currY));
-                currX = x + tmpX;
+                currX = startPosX + tmpX;
 
                 break;
             default:
@@ -182,8 +183,8 @@ public class FPS_GameObjects {
     public boolean containsPoint(int x, int y) {
         // skalowanie rozmiaru balonu wraz z ruchem z dołu w górę
         scaleWidthHeight((double) sHeight);
-        if (x >= currX && x < currX + width) {
-            if (y >= (sHeight - currY) && y < (sHeight - currY + height)) {
+        if (x >= currX && x < currX + objectWidth) {
+            if (y >= (sHeight - currY) && y < (sHeight - currY + objectHeight)) {
                 return true;
             }
         }
@@ -197,8 +198,8 @@ public class FPS_GameObjects {
      * @param scale
      */
     public void scaleWidthHeight(double scale) {
-        width = (int) (icon.getWidth(null) * (1.0 - currY / scale));
-        height = (int) (icon.getHeight(null) * (1.0 - currY / scale));
+        objectWidth = (int) (icon.getWidth(null) * (1.0 - currY / scale));
+        objectHeight = (int) (icon.getHeight(null) * (1.0 - currY / scale));
     }// scaleWidthHeight()
 
     /**
