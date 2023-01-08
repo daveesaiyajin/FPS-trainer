@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 
 public class FPS_GPars {
     public static long GAME_TIME = Long.MAX_VALUE;
-    public static long LEVEL_TIME = 60000; // level time set to 10 minutes
+    public static long LEVEL_TIME = 600000; // level time set to 10 minutes
     public final static long NO_LEVELS = 2;
     public static Image bgImage;
     public static Image menuImage;
@@ -24,7 +24,7 @@ public class FPS_GPars {
     public static int MoveMODE = 1;
     public static boolean changeSettings = false; // check if the change setting button was hit
     public static boolean end = false;
-    public static int noOfObjects = 12;
+    public static int[] noOfObjects = { 20, 30, 50, 75, 100 };
     public static int gWidth = 1920;
     public static int gHeight = 1080;
 
