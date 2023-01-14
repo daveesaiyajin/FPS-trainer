@@ -26,12 +26,6 @@ public class FPS_MainMenuPanel extends JPanel {
     private int panelHeight;
     /* Definition of menu font */
     private Font menuFont;
-    /* Variable that handle the title of the game */
-    private String GameTitle = "FPS Game";
-    /* Variable that defines button width */
-    private int buttonWidth = 200;
-    /* Variable that defines button height */
-    private int buttonHeight = 100;
 
     private FPS_LayoutPanel fpsLayoutManager;
 
@@ -58,9 +52,14 @@ public class FPS_MainMenuPanel extends JPanel {
                 int mouseX = mEvent.getX();
                 int mouseY = mEvent.getY();
 
-                if (mouseX > ((panelWidth / 2) - 100) && mouseX < ((panelWidth / 2) + 100) && mouseY < 250) {
-                    System.out.println("Czemu nie działa?");
+                if (mouseX > ((panelWidth / 2) - 50) && mouseX < ((panelWidth / 2) + 50) && mouseY > 240
+                        && mouseY < 350) {
                     fpsLayoutManager.showGamePanel();
+                }
+
+                if (mouseX > ((panelWidth / 2) - 50) && mouseX < ((panelWidth / 2) + 50) && mouseY > 560
+                        && mouseY < 660) {
+                    System.exit(0);
                 }
             }
         });
@@ -84,18 +83,13 @@ public class FPS_MainMenuPanel extends JPanel {
         int exitStringWidth = fm.stringWidth(exitString);
 
         int menuGameImageWidth = FPS_GPars.menuGameImage.getWidth(getFocusCycleRootAncestor());
-        int menuGameImageHeight = FPS_GPars.menuGameImage.getHeight(getFocusCycleRootAncestor());
-        int menuImageWidth = FPS_GPars.menuImage.getWidth(getFocusCycleRootAncestor());
-        int menuImageHeight = FPS_GPars.menuImage.getHeight(getFocusCycleRootAncestor());
-        int logoImageWidth = FPS_GPars.logoImage.getWidth(getFocusCycleRootAncestor());
-        int logoImageHeight = FPS_GPars.logoImage.getHeight(getFocusCycleRootAncestor());
 
         g.setColor(Color.BLACK);
         g.drawImage(FPS_GPars.menuGameImage, (panelWidth / 2) - (menuGameImageWidth / 2), 100, null);
-        g.drawString(newGameString, (panelWidth / 2) - (newGameStringWidth / 2), 250);
-        g.drawString(aboutString, (panelWidth / 2) - (aboutStringWidth / 2), 400);
-        g.setColor(Color.MAGENTA);
-        g.drawString(exitString, (panelWidth / 2) - (exitStringWidth / 2), 700);
+        g.drawString(newGameString, (panelWidth / 2) - (newGameStringWidth / 2), 300);
+        g.drawString(aboutString, (panelWidth / 2) - (aboutStringWidth / 2), 450);
+        g.setColor(Color.RED);
+        g.drawString(exitString, (panelWidth / 2) - (exitStringWidth / 2), 600);
 
     }
 

@@ -23,7 +23,7 @@ public class FPS_LayoutPanel extends JPanel {
         setLayout(cardLayout); // set the panel layout
 
         fpsMainMenuPanel = new FPS_MainMenuPanel(this, width, height); // constructor of main menu panel
-        fpsMenuPanel = new FPS_MenuPanel(width, height); // constructor of the menu panel
+        fpsMenuPanel = new FPS_MenuPanel(this, width, height); // constructor of the menu panel
         fpsGamePanel = new FPS_Panel(this, width, height); // constructor of main menu panel
         add(fpsMainMenuPanel, "mainMenuPanel");
         add(fpsGamePanel, "gamePanel");

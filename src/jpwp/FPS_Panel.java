@@ -20,11 +20,11 @@ import javax.swing.JPanel;
 public class FPS_Panel extends JPanel {
 
     /* parameter that defines game panel width */
-    public int panelWidth;
+    private int panelWidth;
     /* parameter that defines game panel height */
-    public int panelHeight;
+    private int panelHeight;
     /* parameter that defines menu bar height */
-    public int barHeight;
+    private int barHeight;
 
     /* Number of objects on the screen */
     public int objectsOnTheScreen;
@@ -90,7 +90,7 @@ public class FPS_Panel extends JPanel {
                 /* Choose menu bar */
                 if (mouseX > ((panelWidth / 2 - 50)) && mouseX < ((panelWidth / 2 + 50))
                         && mouseY > (panelHeight - barHeight)) {
-                    FPS_GPars.pause = !FPS_GPars.pause;
+                    fpsLayoutManager.showMenuPanel();
                     return;
                 }
 
