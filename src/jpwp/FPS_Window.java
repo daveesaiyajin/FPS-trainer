@@ -77,9 +77,8 @@ public class FPS_Window extends JFrame {
         long currTime = FPS_GPars.startTime;
 
         while (currTime - FPS_GPars.startTime < FPS_GPars.GAME_TIME) {
-            long elapsedTime = System.currentTimeMillis() - currTime;
-            // check current time - will be used to check if the level time was exceeded
-            currTime += elapsedTime;
+            long elapsedTime = System.currentTimeMillis() - currTime; // check the diff between each tick
+            currTime += elapsedTime; // counting current time
 
             long levelTime = System.currentTimeMillis() - FPS_GPars.startTime;
 

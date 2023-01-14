@@ -43,10 +43,6 @@ public class FPS_Panel extends JPanel {
 
     private FPS_LayoutPanel fpsLayoutManager; // definition of layout manager
 
-    private String newGameString = "NEW GAME";
-    private String changeSpeedString = "CHANGE SPEED";
-    private String changeSizeString = "CHANGE SIZE";
-    private String endGameString = "END GAME";
     private String gameFinishedString = "GAME IS FINISHED!";
     private String totalTimeString = "TOTAL TIME= ";
     private String levelString = "LEVEL: ";
@@ -62,9 +58,9 @@ public class FPS_Panel extends JPanel {
         /* Reset all the game parameters */
         fpsStatus.reset();
         /* Create menu font */
-        menuFont = new Font("MenuButton", Font.BOLD, 48);
+        menuFont = new Font("MenuButton", Font.BOLD + Font.ITALIC, 50);
         /* Create alert font */
-        alertFont = new Font("Dialog", Font.BOLD, 92);
+        alertFont = new Font("Dialog", Font.BOLD + Font.ITALIC, 72);
         this.fpsLayoutManager = fpsLayoutManager;
         /* Assign the value width to global parameter */
         this.panelWidth = width;
@@ -90,15 +86,10 @@ public class FPS_Panel extends JPanel {
                 /* Choose menu bar */
                 if (mouseX > ((panelWidth / 2 - 50)) && mouseX < ((panelWidth / 2 + 50))
                         && mouseY > (panelHeight - barHeight)) {
+                    FPS_GPars.levelPause = true;
+                    FPS_GPars.pause = true;
                     fpsLayoutManager.showMenuPanel();
                     return;
-                }
-
-                /* Check if user choose end game button */
-                if (mouseX < ((panelWidth / 8) + 30) && mouseY > (panelWidth - barHeight)) {
-                    if (FPS_GPars.pause) {
-                        System.exit(0);
-                    }
                 }
                 // czy wybrano rozpoczęcie nowego poziomu lub nowej gry
                 if (mouseX > ((panelWidth / 8) + 30) && mouseX < 800
@@ -176,54 +167,35 @@ public class FPS_Panel extends JPanel {
         // Set the color and draw the bottom bar
         g.setColor(Color.DARK_GRAY);
         g.fillRect(0, panelHeight - barHeight, panelWidth, barHeight);
-        // Ustaw czcionki do wypełnienia paska Menu
-        g.setFont(menuFont);
+        g.setFont(menuFont); // set the font
 
-        FontMetrics fm = g.getFontMetrics();
-        int newGameStringWidth = fm.stringWidth(newGameString);
-        int changeSpeedStringWidth = fm.stringWidth(changeSpeedString);
-        int changeSizeStringWidth = fm.stringWidth(changeSizeString);
-        int endGameStringWidth = fm.stringWidth(endGameString);
+        FontMetrics fm = g.getFontMetrics(); // get current font
 
-        int gameFinishedStringWidth = fm.stringWidth(gameFinishedString);
-        int totalTimeStringWidth = fm.stringWidth(totalTimeString);
+        int gameFinishedStringWidth = fm.stringWidth(gameFinishedString); // get width of string
+        int totalTimeStringWidth = fm.stringWidth(totalTimeString); // get width of string
 
-        int continueStringWidth = fm.stringWidth(continueString);
-        int winTimeStringWidth = fm.stringWidth(winTimeString);
+        int continueStringWidth = fm.stringWidth(continueString); // get width of string
+        int winTimeStringWidth = fm.stringWidth(winTimeString); // get width of string
 
         int menuGameImageWidth = FPS_GPars.menuGameImage.getWidth(getFocusCycleRootAncestor());
         int menuGameImageHeight = FPS_GPars.menuGameImage.getHeight(getFocusCycleRootAncestor());
         int menuImageWidth = FPS_GPars.menuImage.getWidth(getFocusCycleRootAncestor());
         int menuImageHeight = FPS_GPars.menuImage.getHeight(getFocusCycleRootAncestor());
-        int logoImageWidth = FPS_GPars.logoImage.getWidth(getFocusCycleRootAncestor());
-        int logoImageHeight = FPS_GPars.logoImage.getHeight(getFocusCycleRootAncestor());
 
-        // Draw the menu once the pause is set to true
-        if (FPS_GPars.pause) {
-            g.setColor(Color.BLACK);
-            // g.drawImage(FPS_GPars.menuGameImage, (panelWidth / 2) - (menuGameImageWidth /
-            // 2), panelHeight - barHeight - (menuGameImageHeight / 2), null);
-            g.drawString(newGameString, (panelWidth / 8) - (newGameStringWidth / 2), panelHeight - (barHeight / 2));
-            g.drawString(changeSpeedString, 3 * (panelWidth / 8) - (changeSpeedStringWidth / 2),
+        // Draw the details once game is fully end
+        if (FPS_GPars.pause && FPS_GPars.end) {
+            g.setColor(Color.RED);
+            g.setFont(alertFont);
+            DecimalFormat df = new DecimalFormat("#.##");
+            g.drawString(gameFinishedString, (panelWidth / 8) - (gameFinishedStringWidth / 2),
                     panelHeight - (barHeight / 2));
-            g.drawString(changeSizeString, 5 * (panelWidth / 8) - (changeSizeStringWidth / 2),
-                    panelHeight - (barHeight / 2));
-            g.setColor(Color.MAGENTA);
-            g.drawString(endGameString, 7 * (panelWidth / 8) - (endGameStringWidth / 2), panelHeight - (barHeight / 2));
-
-            if (FPS_GPars.end) { // once all the levels will be finished
-                g.setColor(Color.RED);
-                g.setFont(alertFont);
-                DecimalFormat df = new DecimalFormat("#.##");
-                g.drawString(gameFinishedString, (panelWidth / 8) - (gameFinishedStringWidth / 2),
-                        panelHeight - (barHeight / 2));
-                g.setColor(Color.white);
-                g.drawString(totalTimeString + df.format(fpsStatus.time) + "s",
-                        3 * (panelWidth / 2) - (totalTimeStringWidth / 2), panelHeight - (barHeight / 2));
-                g.setFont(menuFont);
-            }
-            // Status for normal game, end flag set to false
-        } else {
+            g.setColor(Color.white);
+            g.drawString(totalTimeString + df.format(fpsStatus.time) + "s",
+                    3 * (panelWidth / 2) - (totalTimeStringWidth / 2), panelHeight - (barHeight / 2));
+            g.setFont(menuFont);
+        }
+        // draw the panel for normal game
+        else {
             g.setColor(Color.WHITE);
             g.drawString(levelString + fpsStatus.level, 50, panelHeight - (barHeight / 2));
             g.drawString(objectCounterString + fpsStatus.ObjectsCounter, 300, panelHeight - (barHeight / 2));
@@ -235,13 +207,13 @@ public class FPS_Panel extends JPanel {
                     FPS_GPars.levelPause = true;
                 }
                 g.setColor(Color.RED);
-                g.drawString(continueString, (panelWidth / 8) - (continueStringWidth / 2),
-                        panelHeight - (barHeight / 2));
+                // g.drawString(continueString, (panelWidth / 8) - (continueStringWidth / 2),
+                // panelHeight - (barHeight / 2));
                 g.setFont(alertFont);
                 DecimalFormat df = new DecimalFormat("#.##");
                 g.setColor(Color.white);
                 g.drawString(winTimeString + df.format(FPS_GPars.levelTime) + "s",
-                        3 * (panelWidth / 8) - (winTimeStringWidth / 2), panelHeight - (barHeight / 2));
+                        5 * (panelWidth / 8) - (winTimeStringWidth / 2), panelHeight - (barHeight / 2));
                 g.setFont(menuFont);
                 // Otherwise set the points
             } else
@@ -249,10 +221,6 @@ public class FPS_Panel extends JPanel {
                 g.drawImage(FPS_GPars.menuImage, (panelWidth / 2) - (menuImageWidth / 2),
                         panelHeight - (barHeight / 2) - (menuImageHeight / 2), null);
         }
-        // Draw the icon
-        // g.drawImage(FPS_GPars.logoImage, panelWidth - logoImageWidth - 50,
-        // panelHeight - (barHeight / 2) - (logoImageHeight / 2), null);
-
     }
 
     public void restartFPSGame() {

@@ -25,22 +25,18 @@ public class FPS_MenuPanel extends JPanel {
     public FPS_Status fpsStatus;
     /* Definition of menu font */
     private Font menuFont;
-    /* Definition of alert font */
-    private Font alertFont;
 
     private FPS_LayoutPanel fpsLayoutManager; // definition of layout manager
 
-    private String newGameString = "NEW GAME";
-    private String changeSpeedString = "CHANGE SPEED";
+    private String resumeGameString = "RESUME GAME";
+    private String changeFreqString = "CHANGE FREQUENCY";
     private String changeSizeString = "CHANGE SIZE";
     private String endGameString = "END GAME";
 
     public FPS_MenuPanel(FPS_LayoutPanel fpsLayoutManager, int width, int height) {
         super();
         /* Create menu font */
-        menuFont = new Font("Dialog", Font.BOLD, 48);
-        /* Create alert font */
-        alertFont = new Font("Dialog", Font.BOLD, 92);
+        menuFont = new Font("Dialog", Font.BOLD + Font.ITALIC, 50);
 
         this.fpsLayoutManager = fpsLayoutManager;
         /* Assign the value width to global parameter */
@@ -48,23 +44,24 @@ public class FPS_MenuPanel extends JPanel {
         /* Assign the value height to global parameter */
         this.panelHeight = height;
 
-        System.out.println(+panelWidth);
-        System.out.println(+panelHeight);
-
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mEvent) {
 
-                int mouseX = mEvent.getX();
-                int mouseY = mEvent.getY();
+                int mouseX = mEvent.getX(); // get mouse X coordinate
+                int mouseY = mEvent.getY(); // get mouse Y coordinate
 
+                // check if the resume button was clicked
                 if (mouseX > ((panelWidth / 2) - 50) && mouseX < ((panelWidth / 2) + 50) && mouseY > 240
                         && mouseY < 350) {
+                    FPS_GPars.pause = false;
+                    FPS_GPars.levelPause = false;
                     fpsLayoutManager.showGamePanel();
                 }
 
-                if (mouseX > ((panelWidth / 2) - 50) && mouseX < ((panelWidth / 2) + 50) && mouseY > 560
-                        && mouseY < 660) {
+                // check if the end game was clicked
+                if (mouseX > ((panelWidth / 2) - 50) && mouseX < ((panelWidth / 2) + 50) && mouseY > 700
+                        && mouseY < 800) {
                     System.exit(0);
                 }
             }
@@ -82,18 +79,19 @@ public class FPS_MenuPanel extends JPanel {
         g.setFont(menuFont);
         g.setColor(Color.BLACK);
 
-        FontMetrics fm = g.getFontMetrics();
-        int newGameStringWidth = fm.stringWidth(newGameString);
-        int changeSpeedStringWidth = fm.stringWidth(changeSpeedString);
-        int changeSizeStringWidth = fm.stringWidth(changeSizeString);
-        int endGameStringWidth = fm.stringWidth(endGameString);
+        FontMetrics fm = g.getFontMetrics(); // get current font
+        int resumeGameStringWidth = fm.stringWidth(resumeGameString); // get width of given string
+        int changeFreqStringWidth = fm.stringWidth(changeFreqString); // get width of given string
+        int changeSizeStringWidth = fm.stringWidth(changeSizeString); // get width of given string
+        int endGameStringWidth = fm.stringWidth(endGameString); // get width of given string
 
-        int menuGameImageWidth = FPS_GPars.menuGameImage.getWidth(getFocusCycleRootAncestor());
+        int menuGameImageWidth = FPS_GPars.menuGameImage.getWidth(getFocusCycleRootAncestor()); // get width of the
+                                                                                                // image
 
         g.setColor(Color.BLACK);
         g.drawImage(FPS_GPars.menuGameImage, (panelWidth / 2) - (menuGameImageWidth / 2), 100, null);
-        g.drawString(newGameString, (panelWidth / 2) - (newGameStringWidth / 2), 300);
-        g.drawString(changeSpeedString, (panelWidth / 2) - (changeSpeedStringWidth / 2), 450);
+        g.drawString(resumeGameString, (panelWidth / 2) - (resumeGameStringWidth / 2), 300);
+        g.drawString(changeFreqString, (panelWidth / 2) - (changeFreqStringWidth / 2), 450);
         g.drawString(changeSizeString, (panelWidth / 2) - (changeSizeStringWidth / 2), 600);
         g.setColor(Color.RED);
         g.drawString(endGameString, (panelWidth / 2) - (endGameStringWidth / 2), 750);

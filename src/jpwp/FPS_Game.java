@@ -15,7 +15,6 @@ public class FPS_Game {
      * This is a main method that creates GUI and starts the whole game
      */
     public static void main(String[] args) {
-        System.out.println("Test czy działa wszystko ");
 
         /* Definition of the game window width */
         int gameWidth = 1920;

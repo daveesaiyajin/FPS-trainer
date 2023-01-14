@@ -25,27 +25,35 @@ public class FPS_LayoutPanel extends JPanel {
         fpsMainMenuPanel = new FPS_MainMenuPanel(this, width, height); // constructor of main menu panel
         fpsMenuPanel = new FPS_MenuPanel(this, width, height); // constructor of the menu panel
         fpsGamePanel = new FPS_Panel(this, width, height); // constructor of main menu panel
-        add(fpsMainMenuPanel, "mainMenuPanel");
-        add(fpsGamePanel, "gamePanel");
-        add(fpsMenuPanel, "menuPanel");
+        add(fpsMainMenuPanel, "mainMenuPanel"); // add main menu panel to the layout
+        add(fpsGamePanel, "gamePanel"); // add game panel to layout
+        add(fpsMenuPanel, "menuPanel"); // add menu panel to layout
 
     }
 
+    // method to show main menu panel
     public void showMainMenu() {
         FPS_GPars.mainMenu = true;
+        FPS_GPars.pause = true;
+        FPS_GPars.levelPause = true;
         cardLayout.show(this, "mainMenuPanel");
         repaint();
-    }
+    } // end of show main menu panel method
 
+    // method to show game panel
     public void showGamePanel() {
         FPS_GPars.mainMenu = false;
+        FPS_GPars.pause = false;
+        FPS_GPars.levelPause = false;
         cardLayout.show(this, "gamePanel");
         repaint();
-    }
+    } // end of show game panel method
 
+    // method to show menu panel
     public void showMenuPanel() {
         FPS_GPars.mainMenu = false;
+        FPS_GPars.levelPause = true;
         cardLayout.show(this, "menuPanel");
         repaint();
-    }
+    } // end of show menu panel method
 }

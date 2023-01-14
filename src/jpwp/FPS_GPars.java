@@ -8,26 +8,27 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 public class FPS_GPars {
-    public static long GAME_TIME = Long.MAX_VALUE;
+    public static long GAME_TIME = Long.MAX_VALUE; // max game time
     public static long LEVEL_TIME = 600000; // level time set to 10 minutes
-    public final static long NO_LEVELS = 2;
-    public static Image bgImage;
-    public static Image menuImage;
-    public static Image menuGameImage;
-    public static Image logoImage;
-    public static Image cursorImage;
-    public static Image[] balloons;
+    public final static long NO_LEVELS = 5; // defines number of levels
+    public static Image bgImage; // set the background image
+    public static Image menuImage; // set the menu button image
+    public static Image menuGameImage; // set the game image
+    public static Image logoImage; // set the logo
+    public static Image cursorImage; // set custom cursor image
+    public static Image[] balloons; // defines objects
     public static boolean pause = false; // variable that set the current status of the game
     public static boolean mainMenu = true; // variable that defines that we're in main menu
-    public static boolean levelPause = false; // variable that pause the level
+    public static boolean levelPause = false; // variable that checks if level is paused
     public static long startTime; // variable that define the starting time of the game
-    public static double levelTime;
-    public static int MoveMODE = 1;
+    public static double levelTime; // defines the level time
+    public static int MoveMODE = 1; // defines current levele
     public static boolean changeSettings = false; // check if the change setting button was hit
-    public static boolean end = false;
-    public static int[] noOfObjects = { 20, 30, 50, 75, 100 };
-    public static int gWidth = 1920;
-    public static int gHeight = 1080;
+    public static boolean end = false; // defines end of the game
+    public static int[] noOfObjects = { 5, 30, 50, 75, 100 }; // defines amount of objects that have to be hit per each
+                                                              // level
+    public static int gWidth = 1920; // defines width of the panel
+    public static int gHeight = 1080; // defines height of the panel
 
     public static void loadInitialImages() {
 
