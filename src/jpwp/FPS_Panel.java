@@ -4,16 +4,18 @@
  */
 package jpwp;
 
-import javax.swing.JPanel;
-
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import java.text.DecimalFormat;
+
+import javax.swing.JPanel;
 
 public class FPS_Panel extends JPanel {
 
@@ -39,16 +41,31 @@ public class FPS_Panel extends JPanel {
     /** Table of objects */
     private FPS_GameObjects[] gameObjects;
 
-    public FPS_Panel(int width, int height) {
+    private FPS_LayoutPanel fpsLayoutManager; // definition of layout manager
+
+    private String newGameString = "NEW GAME";
+    private String changeSpeedString = "CHANGE SPEED";
+    private String changeSizeString = "CHANGE SIZE";
+    private String endGameString = "END GAME";
+    private String gameFinishedString = "GAME IS FINISHED!";
+    private String totalTimeString = "TOTAL TIME= ";
+    private String levelString = "LEVEL: ";
+    private String objectCounterString = "OBJECT COUNTER: ";
+    private String continueString = "CONTINUE";
+    private String winTimeString = "WIN! Time: ";
+
+    public FPS_Panel(FPS_LayoutPanel fpsLayoutManager, int width, int height) {
+        super();
+
         /* Create the object */
         fpsStatus = new FPS_Status();
         /* Reset all the game parameters */
         fpsStatus.reset();
         /* Create menu font */
-        menuFont = new Font("Dialog", Font.BOLD, 36);
+        menuFont = new Font("MenuButton", Font.BOLD, 48);
         /* Create alert font */
         alertFont = new Font("Dialog", Font.BOLD, 92);
-
+        this.fpsLayoutManager = fpsLayoutManager;
         /* Assign the value width to global parameter */
         this.panelWidth = width;
         /* Assign the value height to global parameter */
@@ -71,19 +88,20 @@ public class FPS_Panel extends JPanel {
                 int mouseY = mEvent.getY();
 
                 /* Choose menu bar */
-                if (mouseX > (width - 400) && mouseY > (height - barHeight)) {
+                if (mouseX > ((panelWidth / 2 - 50)) && mouseX < ((panelWidth / 2 + 50))
+                        && mouseY > (panelHeight - barHeight)) {
                     FPS_GPars.pause = !FPS_GPars.pause;
                     return;
                 }
 
                 /* Check if user choose end game button */
-                if (mouseX < ((width / 8) + 30) && mouseY > (height - barHeight)) {
+                if (mouseX < ((panelWidth / 8) + 30) && mouseY > (panelWidth - barHeight)) {
                     if (FPS_GPars.pause) {
-                        System.exit(1);
+                        System.exit(0);
                     }
                 }
                 // czy wybrano rozpoczęcie nowego poziomu lub nowej gry
-                if (mouseX > ((width / 8) + 30) && mouseX < 800
+                if (mouseX > ((panelWidth / 8) + 30) && mouseX < 800
                         && mouseY > (panelHeight - barHeight)) {
                     // Nowa gra
                     if (FPS_GPars.pause) {
@@ -131,7 +149,7 @@ public class FPS_Panel extends JPanel {
     }
 
     /**
-     * Overwrite the method that is responsible of painting the panel
+     * Overwrite the paiting method
      * 
      * @param gs
      */
@@ -148,42 +166,67 @@ public class FPS_Panel extends JPanel {
             gameObjects[i].calculatePathPos(FPS_GPars.MoveMODE);
             if (!gameObjects[i].hit)
                 g.drawImage(gameObjects[i].icon, gameObjects[i].currX, panelHeight - gameObjects[i].currY,
-                        (int) (gameObjects[i].icon.getWidth(null)
+                        (int) (gameObjects[i].icon.getWidth(this)
                                 * (1.0 - gameObjects[i].currY / (double) panelHeight)),
-                        (int) (gameObjects[i].icon.getHeight(null)
+                        (int) (gameObjects[i].icon.getHeight(this)
                                 * (1.0 - gameObjects[i].currY / (double) panelHeight)),
-                        null);
+                        this);
         }
 
-        // Ustaw kolor dolnego paska Menu i narysuj pasek
-        g.setColor(new Color(70, 40, 20));
+        // Set the color and draw the bottom bar
+        g.setColor(Color.DARK_GRAY);
         g.fillRect(0, panelHeight - barHeight, panelWidth, barHeight);
         // Ustaw czcionki do wypełnienia paska Menu
         g.setFont(menuFont);
 
+        FontMetrics fm = g.getFontMetrics();
+        int newGameStringWidth = fm.stringWidth(newGameString);
+        int changeSpeedStringWidth = fm.stringWidth(changeSpeedString);
+        int changeSizeStringWidth = fm.stringWidth(changeSizeString);
+        int endGameStringWidth = fm.stringWidth(endGameString);
+
+        int gameFinishedStringWidth = fm.stringWidth(gameFinishedString);
+        int totalTimeStringWidth = fm.stringWidth(totalTimeString);
+
+        int continueStringWidth = fm.stringWidth(continueString);
+        int winTimeStringWidth = fm.stringWidth(winTimeString);
+
+        int menuGameImageWidth = FPS_GPars.menuGameImage.getWidth(getFocusCycleRootAncestor());
+        int menuGameImageHeight = FPS_GPars.menuGameImage.getHeight(getFocusCycleRootAncestor());
+        int menuImageWidth = FPS_GPars.menuImage.getWidth(getFocusCycleRootAncestor());
+        int menuImageHeight = FPS_GPars.menuImage.getHeight(getFocusCycleRootAncestor());
+        int logoImageWidth = FPS_GPars.logoImage.getWidth(getFocusCycleRootAncestor());
+        int logoImageHeight = FPS_GPars.logoImage.getHeight(getFocusCycleRootAncestor());
+
         // Draw the menu once the pause is set to true
         if (FPS_GPars.pause) {
-            g.setColor(Color.RED);
-            g.drawImage(FPS_GPars.menuGameImage, panelWidth / 2, panelHeight - 650, null);
-            g.drawString("END GAME", (panelWidth / 8), panelHeight - 80);
-            g.setColor(Color.WHITE);
-            g.drawString("CHANGE SPEED", 3 * (panelWidth / 8), panelHeight - 80);
-            g.drawString("CHANGE SIZE", 5 * (panelWidth / 8), panelHeight - 80);
-            g.drawString("NEW GAME", 7 * (panelWidth / 8), panelHeight - 80);
-            if (FPS_GPars.end) { // Czy wszystkie poziomy skończone - koniec gry
+            g.setColor(Color.BLACK);
+            // g.drawImage(FPS_GPars.menuGameImage, (panelWidth / 2) - (menuGameImageWidth /
+            // 2), panelHeight - barHeight - (menuGameImageHeight / 2), null);
+            g.drawString(newGameString, (panelWidth / 8) - (newGameStringWidth / 2), panelHeight - (barHeight / 2));
+            g.drawString(changeSpeedString, 3 * (panelWidth / 8) - (changeSpeedStringWidth / 2),
+                    panelHeight - (barHeight / 2));
+            g.drawString(changeSizeString, 5 * (panelWidth / 8) - (changeSizeStringWidth / 2),
+                    panelHeight - (barHeight / 2));
+            g.setColor(Color.MAGENTA);
+            g.drawString(endGameString, 7 * (panelWidth / 8) - (endGameStringWidth / 2), panelHeight - (barHeight / 2));
+
+            if (FPS_GPars.end) { // once all the levels will be finished
                 g.setColor(Color.RED);
                 g.setFont(alertFont);
                 DecimalFormat df = new DecimalFormat("#.##");
-                g.drawString("GAME IS FINISHED! ", panelWidth / 2, panelHeight / 2);
+                g.drawString(gameFinishedString, (panelWidth / 8) - (gameFinishedStringWidth / 2),
+                        panelHeight - (barHeight / 2));
                 g.setColor(Color.white);
-                g.drawString("TOTAL TIME=" + df.format(fpsStatus.time) + "s", panelWidth / 2, panelHeight / 2 - 200);
+                g.drawString(totalTimeString + df.format(fpsStatus.time) + "s",
+                        3 * (panelWidth / 2) - (totalTimeStringWidth / 2), panelHeight - (barHeight / 2));
                 g.setFont(menuFont);
             }
             // Status for normal game, end flag set to false
         } else {
             g.setColor(Color.WHITE);
-            g.drawString("LEVEL:" + fpsStatus.level, 50, panelHeight - 75);
-            g.drawString("Object counter:" + fpsStatus.ObjectsCounter, 300, panelHeight - 75);
+            g.drawString(levelString + fpsStatus.level, 50, panelHeight - (barHeight / 2));
+            g.drawString(objectCounterString + fpsStatus.ObjectsCounter, 300, panelHeight - (barHeight / 2));
             // Check if all objects for the level was hitted
             if (fpsStatus.ObjectsCounter == FPS_GPars.noOfObjects[fpsStatus.level - 1]) {
                 if (!FPS_GPars.levelPause) {
@@ -192,20 +235,23 @@ public class FPS_Panel extends JPanel {
                     FPS_GPars.levelPause = true;
                 }
                 g.setColor(Color.RED);
-                g.drawString("CONTINUE", panelWidth / 2, panelHeight - 300);
+                g.drawString(continueString, (panelWidth / 8) - (continueStringWidth / 2),
+                        panelHeight - (barHeight / 2));
                 g.setFont(alertFont);
                 DecimalFormat df = new DecimalFormat("#.##");
                 g.setColor(Color.white);
-                g.drawString("WIN! Time:" + df.format(FPS_GPars.levelTime) + "s", panelWidth / 2, panelHeight / 2);
+                g.drawString(winTimeString + df.format(FPS_GPars.levelTime) + "s",
+                        3 * (panelWidth / 8) - (winTimeStringWidth / 2), panelHeight - (barHeight / 2));
                 g.setFont(menuFont);
                 // Otherwise set the points
             } else
-                g.drawString("" + fpsStatus.ObjectsCounter, 500, panelHeight - 10);
-            // Draw the menu icon
-            g.drawImage(FPS_GPars.menuImage, panelWidth - 400, panelHeight - barHeight, null);
+                // Draw the menu icon
+                g.drawImage(FPS_GPars.menuImage, (panelWidth / 2) - (menuImageWidth / 2),
+                        panelHeight - (barHeight / 2) - (menuImageHeight / 2), null);
         }
         // Draw the icon
-        g.drawImage(FPS_GPars.logoImage, panelWidth / 2, panelHeight - barHeight + 20, null);
+        // g.drawImage(FPS_GPars.logoImage, panelWidth - logoImageWidth - 50,
+        // panelHeight - (barHeight / 2) - (logoImageHeight / 2), null);
 
     }
 

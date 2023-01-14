@@ -18,6 +18,7 @@ public class FPS_GPars {
     public static Image cursorImage;
     public static Image[] balloons;
     public static boolean pause = false; // variable that set the current status of the game
+    public static boolean mainMenu = true; // variable that defines that we're in main menu
     public static boolean levelPause = false; // variable that pause the level
     public static long startTime; // variable that define the starting time of the game
     public static double levelTime;
@@ -42,6 +43,7 @@ public class FPS_GPars {
         balloons[2] = loadImage("images/b_violet_300.png");
         balloons[3] = loadImage("images/b_brown_300.png");
         balloons[4] = loadImage("images/b_green_300.png");
+
     }
 
     public static Image loadImage(String fileName) {

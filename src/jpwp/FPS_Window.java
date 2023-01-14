@@ -24,12 +24,10 @@ public class FPS_Window extends JFrame {
      * @param height - set height of the window
      */
 
-    public FPS_MenuBar fpsMenuBar;
+    private FPS_LayoutPanel fpsLayoutPanel; // definition of the layout panel
 
     public FPS_Window(int width, int height) {
         super();
-        fpsMenuBar = new FPS_MenuBar();
-        setJMenuBar(fpsMenuBar);
         setTitle("FPS Trainer game"); // set the title of the game
         setSize(width, height); // set the size of the window
         setResizable(false); // set parameter that allows to change the size of the window
@@ -50,7 +48,7 @@ public class FPS_Window extends JFrame {
      */
 
     private void initGUI(int width, int height) {
-        setLayout(new GridLayout(1, 1)); // set the layout grid
+        setLayout(new GridLayout(1, 1));
         // This methods sets the initial resources
         FPS_GPars.loadInitialImages();
         Toolkit tk = Toolkit.getDefaultToolkit();
@@ -64,8 +62,10 @@ public class FPS_Window extends JFrame {
         // Set the courses shape
         Cursor tCursor = tk.createCustomCursor(FPS_GPars.cursorImage, cursorPoint, "Target Cursor");
         setCursor(tCursor);
-        // set the game panel
-        add(new FPS_Panel(width, height));
+
+        fpsLayoutPanel = new FPS_LayoutPanel(width, height); // declaration of layout panel
+
+        add(fpsLayoutPanel);
     }
 
     /**
