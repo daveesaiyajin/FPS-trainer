@@ -18,22 +18,21 @@ public class FPS_Status {
         ObjectsCounter = 0;
         level = 1;
         time = 0.0;
-    }
+    } // end of reset() method
 
     /*
      * Reset counter of hitted objects on particular level
      */
 
-    public void ResetObjectsCounter() {
+    public void resetObjectsCounter() {
         ObjectsCounter = 0;
-    }
+    } // end of resetObjectsCounter() method
 
     /*
      * Increment the level counter
      */
-
     public void nextLevel() {
         level++;
-    }
+    } // end of nextLevel() method
 
 }

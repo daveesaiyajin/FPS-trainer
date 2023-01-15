@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 public class FPS_GPars {
     public static long GAME_TIME = Long.MAX_VALUE; // max game time
     public static long LEVEL_TIME = 600000; // level time set to 10 minutes
-    public final static long NO_LEVELS = 5; // defines number of levels
+    public final static long NO_LEVELS = 2; // defines number of levels
     public static Image bgImage; // set the background image
     public static Image menuImage; // set the menu button image
     public static Image menuGameImage; // set the game image
@@ -23,10 +23,13 @@ public class FPS_GPars {
     public static long startTime; // variable that define the starting time of the game
     public static double levelTime; // defines the level time
     public static int MoveMODE = 1; // defines current levele
-    public static boolean changeSettings = false; // check if the change setting button was hit
+    public static boolean changeFreq = false; // check if the change freq button was hit
+    public static boolean changeSize = false; // check if the change freq button was hit
+    public static double frequency = 1; // set frequency for the level
+    public static double size = 1; // set size of the objects
     public static boolean end = false; // defines end of the game
-    public static int[] noOfObjects = { 5, 30, 50, 75, 100 }; // defines amount of objects that have to be hit per each
-                                                              // level
+    public static int[] noOfObjects = { 5, 5, 50, 75, 100 }; // defines amount of objects that have to be hit per each
+                                                             // level
     public static int gWidth = 1920; // defines width of the panel
     public static int gHeight = 1080; // defines height of the panel
 

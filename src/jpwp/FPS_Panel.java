@@ -43,6 +43,7 @@ public class FPS_Panel extends JPanel {
 
     private FPS_LayoutPanel fpsLayoutManager; // definition of layout manager
 
+    private String newGameString = "NEW GAME";
     private String gameFinishedString = "GAME IS FINISHED!";
     private String totalTimeString = "TOTAL TIME= ";
     private String levelString = "LEVEL: ";
@@ -87,14 +88,14 @@ public class FPS_Panel extends JPanel {
                 if (mouseX > ((panelWidth / 2 - 50)) && mouseX < ((panelWidth / 2 + 50))
                         && mouseY > (panelHeight - barHeight)) {
                     FPS_GPars.levelPause = true;
-                    FPS_GPars.pause = true;
+                    FPS_GPars.pause = false;
                     fpsLayoutManager.showMenuPanel();
                     return;
                 }
-                // czy wybrano rozpoczęcie nowego poziomu lub nowej gry
-                if (mouseX > ((panelWidth / 8) + 30) && mouseX < 800
-                        && mouseY > (panelHeight - barHeight)) {
-                    // Nowa gra
+                // new game or new level
+                if (mouseX > ((panelWidth / 8) - 35) && mouseX < ((panelWidth / 8) + 35)
+                        && mouseY > (panelHeight - barHeight) && mouseY < (panelHeight - 30)) {
+                    // new game
                     if (FPS_GPars.pause) {
                         FPS_GPars.MoveMODE = 1;
                         FPS_GPars.end = false;
@@ -104,9 +105,9 @@ public class FPS_Panel extends JPanel {
                         restartFPSGame();
                         repaint();
                     } else {
-                        // Nowy poziom
+                        // new level
                         if (FPS_GPars.levelPause) {
-                            // Czy dostępny jest kolejny poziom
+                            // check if there is another level
                             if (FPS_GPars.MoveMODE < FPS_GPars.NO_LEVELS) {
                                 FPS_GPars.MoveMODE++;
                                 fpsStatus.time += FPS_GPars.levelTime;
@@ -115,7 +116,7 @@ public class FPS_Panel extends JPanel {
                                 fpsStatus.nextLevel();
                                 restartFPSGame();
                             } else {
-                                // koniec poziomów = koniec gry
+                                // game ends - no new levels
                                 FPS_GPars.end = true;
                                 fpsStatus.time += FPS_GPars.levelTime;
                                 FPS_GPars.pause = true;
@@ -171,6 +172,7 @@ public class FPS_Panel extends JPanel {
 
         FontMetrics fm = g.getFontMetrics(); // get current font
 
+        int newGameStringWidth = fm.stringWidth(newGameString); // get width of the string based on the initialized font
         int gameFinishedStringWidth = fm.stringWidth(gameFinishedString); // get width of string
         int totalTimeStringWidth = fm.stringWidth(totalTimeString); // get width of string
 
@@ -184,21 +186,20 @@ public class FPS_Panel extends JPanel {
 
         // Draw the details once game is fully end
         if (FPS_GPars.pause && FPS_GPars.end) {
-            g.setColor(Color.RED);
+            g.setColor(Color.WHITE);
             g.setFont(alertFont);
             DecimalFormat df = new DecimalFormat("#.##");
-            g.drawString(gameFinishedString, (panelWidth / 8) - (gameFinishedStringWidth / 2),
+            g.drawString(newGameString, (panelWidth / 8) - (newGameStringWidth / 2), panelHeight - (barHeight / 2));
+            g.setColor(Color.RED);
+            g.drawString(gameFinishedString, 5 * (panelWidth / 8) - (gameFinishedStringWidth / 2),
                     panelHeight - (barHeight / 2));
-            g.setColor(Color.white);
+            g.setColor(Color.WHITE);
             g.drawString(totalTimeString + df.format(fpsStatus.time) + "s",
-                    3 * (panelWidth / 2) - (totalTimeStringWidth / 2), panelHeight - (barHeight / 2));
+                    7 * (panelWidth / 2) - (totalTimeStringWidth / 2), panelHeight - (barHeight / 2));
             g.setFont(menuFont);
         }
-        // draw the panel for normal game
+
         else {
-            g.setColor(Color.WHITE);
-            g.drawString(levelString + fpsStatus.level, 50, panelHeight - (barHeight / 2));
-            g.drawString(objectCounterString + fpsStatus.ObjectsCounter, 300, panelHeight - (barHeight / 2));
             // Check if all objects for the level was hitted
             if (fpsStatus.ObjectsCounter == FPS_GPars.noOfObjects[fpsStatus.level - 1]) {
                 if (!FPS_GPars.levelPause) {
@@ -206,25 +207,29 @@ public class FPS_Panel extends JPanel {
                     FPS_GPars.levelTime = (stopTime - FPS_GPars.startTime) / 1000.0;
                     FPS_GPars.levelPause = true;
                 }
+                // draw the panel once the level is end
                 g.setColor(Color.RED);
-                // g.drawString(continueString, (panelWidth / 8) - (continueStringWidth / 2),
-                // panelHeight - (barHeight / 2));
+                g.drawString(continueString, (panelWidth / 8) - (continueStringWidth / 2),
+                        panelHeight - (barHeight / 2));
                 g.setFont(alertFont);
                 DecimalFormat df = new DecimalFormat("#.##");
-                g.setColor(Color.white);
+                g.setColor(Color.WHITE);
                 g.drawString(winTimeString + df.format(FPS_GPars.levelTime) + "s",
                         5 * (panelWidth / 8) - (winTimeStringWidth / 2), panelHeight - (barHeight / 2));
                 g.setFont(menuFont);
-                // Otherwise set the points
-            } else
-                // Draw the menu icon
+            } else {
+                // draw the panel for normal game
+                g.setColor(Color.WHITE);
+                g.drawString(levelString + fpsStatus.level, 50, panelHeight - (barHeight / 2));
+                g.drawString(objectCounterString + fpsStatus.ObjectsCounter, 300, panelHeight - (barHeight / 2));
                 g.drawImage(FPS_GPars.menuImage, (panelWidth / 2) - (menuImageWidth / 2),
                         panelHeight - (barHeight / 2) - (menuImageHeight / 2), null);
+            }
         }
     }
 
     public void restartFPSGame() {
-        fpsStatus.reset();
+        fpsStatus.resetObjectsCounter();
         FPS_GPars.startTime = System.currentTimeMillis();
         FPS_GPars.pause = false;
         int offset = panelWidth / objectsOnTheScreen;
