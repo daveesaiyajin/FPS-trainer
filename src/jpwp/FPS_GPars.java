@@ -28,7 +28,7 @@ public class FPS_GPars {
     public static double frequency = 1; // set frequency for the level
     public static double size = 1; // set size of the objects
     public static boolean end = false; // defines end of the game
-    public static int[] noOfObjects = { 5, 5, 50, 75, 100 }; // defines amount of objects that have to be hit per each
+    public static int[] noOfObjects = { 5, 5, 75, 75, 100 }; // defines amount of objects that have to be hit per each
                                                              // level
     public static int gWidth = 1920; // defines width of the panel
     public static int gHeight = 1080; // defines height of the panel

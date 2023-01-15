@@ -70,7 +70,7 @@ public class FPS_Panel extends JPanel {
         /* Set the bar height - given in pixels */
         barHeight = 130;
 
-        objectsOnTheScreen = 4;
+        objectsOnTheScreen = 5;
         objectsShift = panelWidth / (FPS_GPars.noOfObjects[fpsStatus.level - 1] / objectsOnTheScreen);
         gameObjects = new FPS_GameObjects[FPS_GPars.noOfObjects[fpsStatus.level - 1]];
 

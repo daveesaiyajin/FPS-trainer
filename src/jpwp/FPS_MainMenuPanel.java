@@ -53,7 +53,7 @@ public class FPS_MainMenuPanel extends JPanel {
                 // check if the new game string was pointed
                 if (mouseX > ((panelWidth / 2) - 50) && mouseX < ((panelWidth / 2) + 50) && mouseY > 240
                         && mouseY < 350) {
-                    fpsLayoutManager.showGamePanel();
+                    fpsLayoutManager.restartGamePanel();
                 }
 
                 // check if about game string was pointed

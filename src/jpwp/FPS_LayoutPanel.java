@@ -49,6 +49,16 @@ public class FPS_LayoutPanel extends JPanel {
         repaint();
     } // end of show game panel method
 
+    // method to restart game panel
+    public void restartGamePanel() {
+        FPS_GPars.mainMenu = false;
+        FPS_GPars.pause = false;
+        FPS_GPars.levelPause = false;
+        fpsGamePanel.restartFPSGame();
+        cardLayout.show(this, "gamePanel");
+        repaint();
+    } // end of show game panel method
+
     // method to show menu panel
     public void showMenuPanel() {
         FPS_GPars.mainMenu = false;
@@ -56,4 +66,8 @@ public class FPS_LayoutPanel extends JPanel {
         cardLayout.show(this, "menuPanel");
         repaint();
     } // end of show menu panel method
+
+    public void update() {
+        repaint();
+    }
 }

@@ -90,14 +90,14 @@ public class FPS_MenuPanel extends JPanel {
                         FPS_GPars.frequency = 0.8;
                         FPS_GPars.changeFreq = false;
                         System.out.println("Freq = " + FPS_GPars.frequency);
-                        fpsLayoutManager.showGamePanel();
+                        fpsLayoutManager.restartGamePanel();
                     }
                     // scale the object to smaller
                     if (FPS_GPars.changeSize) {
                         FPS_GPars.size = 0.8;
                         FPS_GPars.changeSize = false;
                         System.out.println("Size = " + FPS_GPars.size);
-                        fpsLayoutManager.showGamePanel();
+                        fpsLayoutManager.restartGamePanel();
                     }
                 }
 
@@ -109,14 +109,14 @@ public class FPS_MenuPanel extends JPanel {
                         FPS_GPars.frequency = 1;
                         FPS_GPars.changeFreq = false;
                         System.out.println("Freq = " + FPS_GPars.frequency);
-                        fpsLayoutManager.showGamePanel();
+                        fpsLayoutManager.restartGamePanel();
                     }
                     // scale the object to normal
                     if (FPS_GPars.changeSize) {
                         FPS_GPars.size = 1;
                         FPS_GPars.changeSize = false;
                         System.out.println("Size = " + FPS_GPars.size);
-                        fpsLayoutManager.showGamePanel();
+                        fpsLayoutManager.restartGamePanel();
                     }
                 }
 
@@ -128,14 +128,14 @@ public class FPS_MenuPanel extends JPanel {
                         FPS_GPars.frequency = 1.2;
                         FPS_GPars.changeFreq = false;
                         System.out.println("Freq = " + FPS_GPars.frequency);
-                        fpsLayoutManager.showGamePanel();
+                        fpsLayoutManager.restartGamePanel();
                     }
                     // scale the object to bigger
                     if (FPS_GPars.changeSize) {
                         FPS_GPars.size = 1.2;
                         FPS_GPars.changeSize = false;
                         System.out.println("Size = " + FPS_GPars.size);
-                        fpsLayoutManager.showGamePanel();
+                        fpsLayoutManager.restartGamePanel();
                     }
                 }
 
