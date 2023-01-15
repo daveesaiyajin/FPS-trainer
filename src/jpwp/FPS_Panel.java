@@ -1,4 +1,4 @@
-/*
+/**
  * Created by Dawid Zieliński
  * Elektronika i telekomunikacja sem. 7 
  */
@@ -17,71 +17,98 @@ import java.text.DecimalFormat;
 
 import javax.swing.JPanel;
 
+/**
+ * Definition of the FPS_Panel class that contains details of the game panel
+ * that will be displayed
+ */
+
 public class FPS_Panel extends JPanel {
 
-    /* parameter that defines game panel width */
+    /** parameter that defines game panel width */
     private int panelWidth;
-    /* parameter that defines game panel height */
+    /** parameter that defines game panel height */
     private int panelHeight;
-    /* parameter that defines menu bar height */
+    /** parameter that defines menu bar height */
     private int barHeight;
 
-    /* Number of objects on the screen */
+    /** Number of objects on the screen */
     public int objectsOnTheScreen;
-    /* Shift between the objects on the screen */
+    /** Shift between the objects on the screen */
     public int objectsShift;
 
-    /* Definition of fpsStatus object */
+    /** Definition of fpsStatus object */
     public FPS_Status fpsStatus;
-    /* Definition of menu font */
+    /** Definition of menu font */
     public Font menuFont;
-    /* Definition of alert font */
+    /** Definition of alert font */
     public Font alertFont;
 
     /** Table of objects */
     private FPS_GameObjects[] gameObjects;
 
-    private FPS_LayoutPanel fpsLayoutManager; // definition of layout manager
+    /** definition of layout manager */
+    private FPS_LayoutPanel fpsLayoutManager;
 
+    /** string definition */
     private String newGameString = "NEW GAME";
+    /** string definition */
     private String gameFinishedString = "GAME IS FINISHED!";
+    /** string definition */
     private String totalTimeString = "TOTAL TIME= ";
+    /** string definition */
     private String levelString = "LEVEL: ";
+    /** string definition */
     private String objectCounterString = "OBJECT COUNTER: ";
+    /** string definition */
     private String continueString = "CONTINUE";
+    /** string definition */
     private String winTimeString = "WIN! Time: ";
 
+    /**
+     * This is the layout manager panel definition
+     * 
+     * @param fpsLayoutManager - referrence to the layout manager panel
+     * @param width            - width of the panel
+     * @param height           - height of the panel
+     */
     public FPS_Panel(FPS_LayoutPanel fpsLayoutManager, int width, int height) {
         super();
-
-        /* Create the object */
+        /** Create the object */
         fpsStatus = new FPS_Status();
-        /* Reset all the game parameters */
+        /** Reset all the game parameters */
         fpsStatus.reset();
-        /* Create menu font */
+        /** Create menu font */
         menuFont = new Font("MenuButton", Font.BOLD + Font.ITALIC, 50);
-        /* Create alert font */
+        /** Create alert font */
         alertFont = new Font("Dialog", Font.BOLD + Font.ITALIC, 72);
         this.fpsLayoutManager = fpsLayoutManager;
-        /* Assign the value width to global parameter */
+        /** Assign the value width to global parameter */
         this.panelWidth = width;
-        /* Assign the value height to global parameter */
+        /** Assign the value height to global parameter */
         this.panelHeight = height;
-        /* Set the bar height - given in pixels */
+        /** Set the bar height - given in pixels */
         barHeight = 130;
 
+        /** definition of objects displayed in the line */
         objectsOnTheScreen = 5;
+        /** shift between displayed objects */
         objectsShift = panelWidth / (FPS_GPars.noOfObjects[fpsStatus.level - 1] / objectsOnTheScreen);
+        /** constructor of game objects */
         gameObjects = new FPS_GameObjects[FPS_GPars.noOfObjects[fpsStatus.level - 1]];
 
         restartFPSGame();
 
-        /* Mouse action definition */
+        /**
+         * Override the mouse listener
+         * 
+         */
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mEvent) {
 
+                /** get X coordinates of the mouse */
                 int mouseX = mEvent.getX();
+                /** get Y coordinates of the mouse */
                 int mouseY = mEvent.getY();
 
                 /* Choose menu bar */
@@ -125,7 +152,7 @@ public class FPS_Panel extends JPanel {
                         }
                     }
                 }
-                // inaczej sprawdź czy trafiono obiekt (balon)
+                // check if the baloon was hit
                 for (int i = 0; i < gameObjects.length; i++) {
                     if (mouseY < (panelHeight - barHeight)) {
                         if (gameObjects[i].containsPoint(mouseX, mouseY)) {
@@ -135,7 +162,7 @@ public class FPS_Panel extends JPanel {
                             }
                         }
                     }
-                } // koniec for i
+                } // end of for i loop
             }
         }); // end of MouseListener method
     }
@@ -148,12 +175,12 @@ public class FPS_Panel extends JPanel {
     @Override
     protected void paintComponent(Graphics gs) {
         Graphics2D g = (Graphics2D) gs;
-        // Set antyalisiang and texture smoothing
+        /** Set antyalisiang and texture smoothing */
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        // Draw the background
+        /** Draw the background */
         g.drawImage(FPS_GPars.bgImage, 0, 0, null);
 
-        // Na tle obiektu pierwszego planu
+        /** draw on the first plan */
         for (int i = 0; i < gameObjects.length; i++) {
             gameObjects[i].calculatePathPos(FPS_GPars.MoveMODE);
             if (!gameObjects[i].hit)
@@ -165,23 +192,30 @@ public class FPS_Panel extends JPanel {
                         this);
         }
 
-        // Set the color and draw the bottom bar
+        /** Set the color and draw the bottom bar */
         g.setColor(Color.DARK_GRAY);
         g.fillRect(0, panelHeight - barHeight, panelWidth, barHeight);
-        g.setFont(menuFont); // set the font
+        /** set the font */
+        g.setFont(menuFont);
 
-        FontMetrics fm = g.getFontMetrics(); // get current font
+        /** get current font */
+        FontMetrics fm = g.getFontMetrics();
 
-        int newGameStringWidth = fm.stringWidth(newGameString); // get width of the string based on the initialized font
-        int gameFinishedStringWidth = fm.stringWidth(gameFinishedString); // get width of string
-        int totalTimeStringWidth = fm.stringWidth(totalTimeString); // get width of string
+        /** get width of the string based on the initialized font */
+        int newGameStringWidth = fm.stringWidth(newGameString);
+        /** get width of string */
+        int gameFinishedStringWidth = fm.stringWidth(gameFinishedString);
+        /** get width of string */
+        int totalTimeStringWidth = fm.stringWidth(totalTimeString);
 
-        int continueStringWidth = fm.stringWidth(continueString); // get width of string
-        int winTimeStringWidth = fm.stringWidth(winTimeString); // get width of string
+        /** get width of string */
+        int continueStringWidth = fm.stringWidth(continueString);
+        /** get width of string */
+        int winTimeStringWidth = fm.stringWidth(winTimeString);
 
-        int menuGameImageWidth = FPS_GPars.menuGameImage.getWidth(getFocusCycleRootAncestor());
-        int menuGameImageHeight = FPS_GPars.menuGameImage.getHeight(getFocusCycleRootAncestor());
+        /** get image width */
         int menuImageWidth = FPS_GPars.menuImage.getWidth(getFocusCycleRootAncestor());
+        /** get image height */
         int menuImageHeight = FPS_GPars.menuImage.getHeight(getFocusCycleRootAncestor());
 
         // Draw the details once game is fully end
@@ -228,11 +262,15 @@ public class FPS_Panel extends JPanel {
         }
     }
 
+    /**
+     * restartFPSGame method, that restarts the whole game and re-draw the objects
+     */
+
     public void restartFPSGame() {
-        fpsStatus.resetObjectsCounter();
-        FPS_GPars.startTime = System.currentTimeMillis();
-        FPS_GPars.pause = false;
-        int offset = panelWidth / objectsOnTheScreen;
+        fpsStatus.resetObjectsCounter(); // reset the objects counter
+        FPS_GPars.startTime = System.currentTimeMillis(); // set the current time
+        FPS_GPars.pause = false; // set the game pause flag
+        int offset = panelWidth / objectsOnTheScreen; // calculate the offset
         int inLine = 0;
         int yLine = 0;
         for (int i = 0; i < FPS_GPars.noOfObjects[fpsStatus.level - 1]; i++) {
@@ -240,7 +278,7 @@ public class FPS_Panel extends JPanel {
             gameObjects[i] = new FPS_GameObjects(
                     (((inLine % objectsOnTheScreen) + 1) * offset)
                             - FPS_GPars.balloons[(i % FPS_GPars.balloons.length)].getWidth(null),
-                    0, 100, 0.0025, FPS_GPars.balloons);
+                    0, 100, (0.0025 * FPS_GPars.frequency), FPS_GPars.balloons);
             gameObjects[i].setScreenSize(panelWidth, panelHeight);
 
             if (inLine >= objectsOnTheScreen) {
@@ -249,6 +287,6 @@ public class FPS_Panel extends JPanel {
             }
             inLine++;
             gameObjects[i].setYPos(yLine * objectsShift * -1);
-        } // koniec for i
-    }
+        } // end of for i loop
+    } // end of restartFPSGame() method
 }

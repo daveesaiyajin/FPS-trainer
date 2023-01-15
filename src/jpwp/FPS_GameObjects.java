@@ -8,7 +8,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 /**
- * Constructor of the objects that will pop-up on the screen
+ * Constructor of the objects that will appear on the screen
  */
 
 public class FPS_GameObjects {
@@ -26,36 +26,36 @@ public class FPS_GameObjects {
     /** Height of the object */
     public int objectHeight;
 
-    /** Krok przesunięcia obiektu z dołu do góry */
+    /** diff of moving the objects from bottom to top */
     public int dy;
-    /** Kąt w funkcji sinus opisującej ruch balonu */
+    /** angle of the sinus method */
     private double angle;
-    /** Amplituda w funkcji sinus opisującej ruch balonu */
+    /** ampl of sinus function */
     public int ampl;
-    /** Częstotliwość funkcji sinus opisującej ruch balonu */
+    /** freq of sinus function that describe the move */
     public double freq;
-    /** Kolor balonu */
+    /** baloon color */
     public int color;
     /** Omega 2Pi*f */
     public final static double w = 2 * Math.PI;
-    /** Szerokość pola graficznego */
+    /** width of the game panel */
     public int sWidth;
-    /** Wysokość pola graficznego */
+    /** height of the game panel */
     public int sHeight;
 
-    /** Czy trafiono balon */
+    /** flag that sets if the balloon was hit */
     public boolean hit;
-    /** Ikona obiektu - balonu */
+    /** icon of the baloong image */
     public Image icon;
 
     /**
-     * Konstruktor - ustawienie parametrów obiektu, wylosowanie koloru balonu
+     * Constructor - set the object param, draw the baloon color
      * 
-     * @param x      początkowa współrzędna x
-     * @param y      początkowa współrzędna y
-     * @param ampl   amplituda sinus (ruch balonu)
-     * @param freq   częstotliwość w funkcji sinus
-     * @param images tablica ikon z balonami
+     * @param x      starting point X
+     * @param y      starting point Y
+     * @param ampl   amplitude of sinus function
+     * @param freq   freq of sinus function
+     * @param images table of icons
      */
     public FPS_GameObjects(int x, int y, int ampl, double freq, Image[] images) {
         this.startPosX = x;
@@ -69,20 +69,20 @@ public class FPS_GameObjects {
 
         this.ampl = ampl;
         this.freq = freq;
-        // losujemy kolor balonu
+        // draw the baloon color
         color = (int) (0.4 + Math.random() * images.length);
         if (color >= images.length)
             color = images.length - 1;
         icon = images[color];
         objectWidth = icon.getWidth(null);
         objectHeight = icon.getHeight(null);
-        // ustawiamy pulsację w funkcji sinus 2 Pi f
+        // set the omega of sinus 2 Pi f function
         setOmega(this.freq);
 
     }
 
     /**
-     * Balon trafiony - ustaw stan i odtwórz dźwięk
+     * Balloon hit - set state and play the sound
      */
     public void setHit() {
         if (!hit) {
@@ -92,10 +92,10 @@ public class FPS_GameObjects {
     }// setHit()
 
     /**
-     * Ustaw pozycję balonu
+     * Set the balloon position
      * 
-     * @param cX współrzędna x
-     * @param cY współrzędna y
+     * @param cX - coordinate X
+     * @param cY - coordinate Y
      */
     public void setPosition(int cX, int cY) {
         currX = cX;
@@ -103,10 +103,10 @@ public class FPS_GameObjects {
     }// setPosition()
 
     /**
-     * Ustaw rozmiar pola graficznego
+     * Set the panel width and height
      * 
-     * @param gWidth  szerokość
-     * @param gHeight wysokość
+     * @param gWidth  width
+     * @param gHeight height
      */
     public void setScreenSize(int gWidth, int gHeight) {
         sWidth = gWidth;
@@ -114,7 +114,7 @@ public class FPS_GameObjects {
     }
 
     /**
-     * Ustaw pozycję y obiektu/balonu
+     * Set the position Y of the object
      * 
      * @param cY
      */
@@ -123,16 +123,16 @@ public class FPS_GameObjects {
     }// setYPos()
 
     /**
-     * Pobierz pozycję balonu
+     * Get the object position
      * 
-     * @return pozycja balonu
+     * @return balloon position
      */
     public Point getPosition() {
         return new Point(currX, currY);
     }// getPosition()
 
     /**
-     * Ustaw 2 Pi f
+     * Set 2 Pi f
      * 
      * @param freq
      */
@@ -141,15 +141,16 @@ public class FPS_GameObjects {
     }// setOmega()
 
     /**
-     * Metoda obliczania pozycji balonu - symulacja ruchu
+     * Method that calculate the position of the balloon
      * 
-     * @param mode Tryb określający ruch: 1 - liniowo (prawie) do góry
-     *             2 - sinus do góry
+     * @param mode State that describe the move:
+     *             1 - linear - from bottom to top
+     *             2 - sinus - from bottom to top
      */
     public void calculatePathPos(int mode) {
         int tmpX = 0;
         switch (mode) {
-            case 1: // liniowo
+            case 1: // linear
                 currY = currY + dy;
                 if (currY > sHeight) {
                     currY = 0;
@@ -173,15 +174,14 @@ public class FPS_GameObjects {
     }// calculatePathPos()
 
     /**
-     * Funkcja określająca czy określone współrzędne (np. klik myszką
-     * są w obrębie obiektu/balonu
+     * Function tha checks if the mouse click was in the bounds of the object
      * 
-     * @param x wsp. x
-     * @param y wsp. y
-     * @return true jeśli obszar balonu zawiera dany punkt
+     * @param x coordinate X
+     * @param y coordinate Y
+     * @return true once the balloon was picked
      */
     public boolean containsPoint(int x, int y) {
-        // skalowanie rozmiaru balonu wraz z ruchem z dołu w górę
+        // scale the object with the move from bottom to top
         scaleWidthHeight((double) sHeight);
         if (x >= currX && x < currX + objectWidth) {
             if (y >= (sHeight - currY) && y < (sHeight - currY + objectHeight)) {
@@ -193,19 +193,19 @@ public class FPS_GameObjects {
     }// containsPoint()
 
     /**
-     * Skalowanie rozmiaru balonu wraz z ruchem z dołu w górę
+     * Scale the object with the move from bottom to top
      * 
      * @param scale
      */
     public void scaleWidthHeight(double scale) {
-        objectWidth = (int) (icon.getWidth(null) * (1.0 - currY / scale));
-        objectHeight = (int) (icon.getHeight(null) * (1.0 - currY / scale));
+        objectWidth = (int) (icon.getWidth(null) * (1.0 - currY / (scale * FPS_GPars.size)));
+        objectHeight = (int) (icon.getHeight(null) * (1.0 - currY / (scale * FPS_GPars.size)));
     }// scaleWidthHeight()
 
     /**
-     * Funkcja odtwarzania dźwięku z pliku
+     * Play the sound
      * 
-     * @param f - obiekt klasy File reprezentujący ścieżkę do pliku MP3
+     * @param f - object of File class that represent path to the MP3 file
      */
     public static synchronized void playSound(final File f) {
         new Thread(new Runnable() {
@@ -223,4 +223,4 @@ public class FPS_GameObjects {
     }// playSound()
 
 }
-// koniec class FlyingBallonn
+// end of class GameObjects

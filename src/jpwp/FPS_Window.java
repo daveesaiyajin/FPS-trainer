@@ -1,4 +1,4 @@
-/*
+/**
  * Created by Dawid Zieliński
  * Elektronika i telekomunikacja sem. 7 
  */
@@ -11,69 +11,82 @@ import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Toolkit;
 
-/* 
- * This is defitnition of the main window of FPS Trainer game 
+/**
+ * This is defitnition of the main window of FPS Trainer game
  */
 public class FPS_Window extends JFrame {
 
-    /*
+    /** definition of the layout panel */
+    private FPS_LayoutPanel fpsLayoutPanel;
+
+    /**
      * This is main constructor, which setup all the game parameters
      * 
-     * @param width - set width of the window
+     * @param width  - set width of the window
      * 
      * @param height - set height of the window
      */
-
-    private FPS_LayoutPanel fpsLayoutPanel; // definition of the layout panel
-
     public FPS_Window(int width, int height) {
         super();
-        setTitle("FPS Trainer game"); // set the title of the game
-        setSize(width, height); // set the size of the window
-        setResizable(false); // set parameter that allows to change the size of the window
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // set the default window operations
-        // setUndecorated(true); - parametr ukrywający ramkę okna
-        setLocationRelativeTo(rootPane); // set the location of the window in the center
-        initGUI(width, height); // this is a method that initialize the interface
-        setVisible(true); // set the visibility of the window
-        animationLoop(); // start the game loop
-    }
+        /** set the title of the game */
+        setTitle("FPS Trainer game");
+        /** set the size of the window */
+        setSize(width, height);
+        /** set parameter that allows to change the size of the window */
+        setResizable(false);
+        /** set the default window operations */
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        /** hide the frame */
+        setUndecorated(true);
+        /** set the location of the window in the center */
+        setLocationRelativeTo(rootPane);
+        /** this is a method that initialize the interface */
+        initGUI(width, height);
+        /** set the visibility of the window */
+        setVisible(true);
+        /** start the game loop */
+        animationLoop();
+    } // end of FPS_Window
 
-    /*
+    /**
      * Initialize the user interface
      * 
-     * @param width - set width
+     * @param width  - set width
      * 
      * @param height - set height
      */
-
     private void initGUI(int width, int height) {
+        /** set the layout grid */
         setLayout(new GridLayout(1, 1));
-        // This methods sets the initial resources
+        /** Sets the initial resources */
         FPS_GPars.loadInitialImages();
         Toolkit tk = Toolkit.getDefaultToolkit();
 
+        /** get the image width */
         int CursorWidth = FPS_GPars.cursorImage.getWidth(null);
+        /** get the image height */
         int CursorHeight = FPS_GPars.cursorImage.getHeight(null);
 
-        /* Set the cursor middle point */
+        /** Set the cursor middle point */
         Point cursorPoint = new Point(CursorWidth / 2, CursorHeight / 2);
 
-        // Set the courses shape
+        /** Set the courses shape */
         Cursor tCursor = tk.createCustomCursor(FPS_GPars.cursorImage, cursorPoint, "Target Cursor");
         setCursor(tCursor);
 
-        fpsLayoutPanel = new FPS_LayoutPanel(width, height); // declaration of layout panel
+        /** declaration of layout panel */
+        fpsLayoutPanel = new FPS_LayoutPanel(width, height);
 
         add(fpsLayoutPanel);
-    }
+    } // end of initGUI()
 
     /**
      * Main loop of the game
      */
     private void animationLoop() {
-        // Set the starting time of the game by getting the current system timestamp
+        /** Set the starting time of the game by getting the current system timestamp */
         FPS_GPars.startTime = System.currentTimeMillis();
+        /** assign variable */
         long currTime = FPS_GPars.startTime;
 
         while (currTime - FPS_GPars.startTime < FPS_GPars.GAME_TIME) {
@@ -82,7 +95,7 @@ public class FPS_Window extends JFrame {
 
             long levelTime = System.currentTimeMillis() - FPS_GPars.startTime;
 
-            System.out.println("Aktualny czas gry: " + levelTime);
+            System.out.println("Game time : " + levelTime);
 
             if (currTime - System.currentTimeMillis() >= FPS_GPars.LEVEL_TIME) {
                 System.out.println("Time's up! " + levelTime);
@@ -99,4 +112,4 @@ public class FPS_Window extends JFrame {
         } // end of while condition
     }// end of animationLoop() method
 
-}
+} // end of FPS_Window class
